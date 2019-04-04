@@ -113,8 +113,8 @@ class Box(object):
             self.volume = volume
             self.initalc = ''
             self.initalv = volume
-        self.rst = 1
         self.pastname = []
+        self.rstname =[]
     def append_string(self, additional_contents):
         """
         What comes in:
@@ -171,7 +171,6 @@ class Box(object):
         # ---------------------------------------------------------------------
         name = self.contents+additional_contents
         self.contents = name[:self.volume]
-        self.rst = self.rst + 1
         self.pastname = self.pastname + [self.contents]
         return name[self.volume:]
 
@@ -223,7 +222,6 @@ class Box(object):
         #######################################################################
 
         s = self.append_string(self.contents)
-        self.rst = self.rst + 1
         self.pastname = self.pastname + [self.contents]
         return s
 
@@ -276,7 +274,6 @@ class Box(object):
         # ---------------------------------------------------------------------
         self.volume = new_volume
         name = self.contents
-        self.rst = self.rst + 1
         self.contents = name[:self.volume]
         self.pastname = self.pastname + [self.contents]
         return name[self.volume:]
@@ -335,7 +332,6 @@ class Box(object):
         # ---------------------------------------------------------------------
         n = self.double()
         s = self.shrink(new_volume)
-        self.rst = self.rst + 1
         self.pastname = self.pastname + [self.contents]
         return len(n)+len(s)
     def reset(self):
@@ -356,9 +352,9 @@ class Box(object):
         #    DIFFICULTY:      4
         #    TIME ESTIMATE:   5 minutes.
         # ---------------------------------------------------------------------
+        self.rstname = self.rstname + [self.pastname[len(self.pastname)-1]]
         self.contents =self.initalc
         self.volume = self.initalv
-        self.rst = 0
 
     def steal(self, other_box):
         """
@@ -393,7 +389,6 @@ class Box(object):
         #######################################################################
         x= self.append_string(other_box.contents)
         other_box.contents = x
-        self.rst = self.rst + 1
         self.pastname = self.pastname + [self.contents]
     def get_history(self):
         """
@@ -425,7 +420,7 @@ class Box(object):
           #   h is now ['GoodGo', 'GoodBye']
         """
         # ---------------------------------------------------------------------
-        # TODO: 9. Implement and test this function.
+        # DONE: 9. Implement and test this function.
         #     The testing code is already written for you (above).
         # ---------------------------------------------------------------------
         # ---------------------------------------------------------------------
@@ -433,13 +428,7 @@ class Box(object):
         #    DIFFICULTY:      6
         #    TIME ESTIMATE:   5 minutes.
         # ---------------------------------------------------------------------
-        names = []
-        if self.rst > 0:
-            return names
-        else:
-            for k in range(self.rst+1,0,-1):
-                names = names + [self.pastname[len(self.pastname)-k]]
-        return names
+        return self.rstname
 
     def combined_box(self, other_box):
         """
